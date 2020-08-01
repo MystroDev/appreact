@@ -3,12 +3,18 @@ import { Label, Input, FormGroup, Button } from "reactstrap"
 import { X } from "react-feather"
 import PerfectScrollbar from "react-perfect-scrollbar"
 import classnames from "classnames"
+import axios from "axios"
+import moment from 'moment'
 
 class DataListSidebar extends Component {
   state = {
     id: "",
-    name: "",
-    category: "Audio",
+    nom: "",
+    prenom: "",
+    matricule: "",
+    date_embauche: new Date(),
+    category: [],
+    niveau: [],
     order_status: "pending",
     price: "",
     img: "",
@@ -19,24 +25,37 @@ class DataListSidebar extends Component {
 
   addNew = false
 
+  componentDidMount() {
+    //categories
+    axios.get('http://127.0.0.1:8000/categorie').then(resp => {
+      this.setState({ category: resp.data })
+    });
+
+    //niveau
+    axios.get('http://127.0.0.1:8000/niveau').then(resp => {
+      this.setState({ niveau: resp.data })
+    });
+
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (this.props.data !== null && prevProps.data === null) {
       if (this.props.data.id !== prevState.id) {
         this.setState({ id: this.props.data.id })
       }
-      if (this.props.data.name !== prevState.name) {
-        this.setState({ name: this.props.data.name })
+      if (this.props.data.nom !== prevState.nom) {
+        this.setState({ nom: this.props.data.nom })
       }
-      if (this.props.data.category !== prevState.category) {
-        this.setState({ category: this.props.data.category })
+      if (this.props.data.prenom !== prevState.prenom) {
+        this.setState({ prenom: this.props.data.prenom })
       }
-      if (this.props.data.popularity.popValue !== prevState.popularity) {
-        this.setState({
-          popularity: {
-            ...this.state.popularity,
-            popValue: this.props.data.popularity.popValue
-          }
-        })
+      if (this.props.data.matricule !== prevState.matricule) {
+        this.setState({ matricule: this.props.data.matricule })
+      }
+
+      if (this.props.data.dateembauche !== prevState.dateembauche) {
+        this.setState({ date_embauche: this.props.data.dateembauche })
+
       }
       if (this.props.data.order_status !== prevState.order_status) {
         this.setState({ order_status: this.props.data.order_status })
@@ -51,8 +70,9 @@ class DataListSidebar extends Component {
     if (this.props.data === null && prevProps.data !== null) {
       this.setState({
         id: "",
-        name: "",
-        category: "Audio",
+        nom: "",
+        prenom: "",
+        matricule: 0,
         order_status: "pending",
         price: "",
         img: "",
@@ -64,8 +84,9 @@ class DataListSidebar extends Component {
     if (this.addNew) {
       this.setState({
         id: "",
-        name: "",
-        category: "Audio",
+        nom: "",
+        prenom: "",
+        matricule: 0,
         order_status: "pending",
         price: "",
         img: "",
@@ -75,6 +96,7 @@ class DataListSidebar extends Component {
       })
     }
     this.addNew = false
+
   }
 
   handleSubmit = obj => {
@@ -93,7 +115,24 @@ class DataListSidebar extends Component {
 
   render() {
     let { show, handleSidebar, data } = this.props
-    let { name, category, order_status, price, popularity, img } = this.state
+    let { nom, prenom, matricule, date_embauche, category, niveau, order_status, price, popularity, img } = this.state
+
+    //filling category with data
+    const options_of_category = category.map((value, index) => {
+      return <option key={index}>{value.designation}</option>
+    })
+
+    //filling niveau with data
+    const options_of_niveau = category.map((value, index) => {
+      return <option key={index}>{value.designation}</option>
+    })
+
+
+    let fulldate = moment().format("DD/MM/YYYY");
+    //console.log(this.state.date_embauche)
+    //fulldate = this.state.date_embauche
+    //let fulldate2 = fulldate.moment.format("DD/MM/YYYY")
+    //console.log(fulldate2)
     return (
       <div
         className={classnames("data-list-sidebar", {
@@ -108,7 +147,7 @@ class DataListSidebar extends Component {
           options={{ wheelPropagation: false }}>
           {this.props.thumbView && img.length ? (
             <FormGroup className="text-center">
-              <img className="img-fluid" src={img} alt={name} />
+              <img className="img-fluid" src={img} alt={nom} />
               <div className="d-flex flex-wrap justify-content-between mt-2">
                 <label
                   className="btn btn-flat-primary"
@@ -135,65 +174,88 @@ class DataListSidebar extends Component {
             </FormGroup>
           ) : null}
           <FormGroup>
-            <Label for="data-name">Name</Label>
+            <Label for="data-name">Nom</Label>
             <Input
               type="text"
-              value={name}
-              placeholder="Apple IphoneX"
-              onChange={e => this.setState({ name: e.target.value })}
+              value={nom}
+              placeholder="nom"
+              onChange={e => this.setState({ nom: e.target.value })}
               id="data-name"
             />
           </FormGroup>
+
+          <FormGroup>
+            <Label for="data-name">Prenom</Label>
+            <Input
+              type="text"
+              value={prenom}
+              placeholder="prenom"
+              onChange={e => this.setState({ prenom: e.target.value })}
+              id="data-name"
+            />
+          </FormGroup>
+
+          <FormGroup>
+            <Label for="data-name">Matricule</Label>
+            <Input
+              type="text"
+              value={matricule}
+              placeholder="matricule"
+              onChange={e => this.setState({ matricule: e.target.value })}
+              id="data-name"
+            />
+          </FormGroup>
+
+          <FormGroup>
+            <Label for="data-name">Date Embauche</Label>
+            <Input
+              type="date"
+              value={date_embauche}
+              onChange={e => this.setState({ date_embauche: e.target.value })}
+              id="data-name"
+            />
+          </FormGroup>
+
           <FormGroup>
             <Label for="data-category">Category</Label>
             <Input
               type="select"
               id="data-category"
-              value={category}
-              onChange={e => this.setState({ category: e.target.value })}>
-              <option>Audio</option>
-              <option>Computers</option>
-              <option>Fitness</option>
-              <option>Appliances</option>
+              value={category.designation}
+            //onChange={e => this.setState({ category: e.target.value })}
+            >
+              {options_of_category}
             </Input>
           </FormGroup>
           <FormGroup>
-            <Label for="data-popularity">Popularity</Label>
-            <Input
-              type="number"
-              value={popularity.popValue}
-              id="data-popularity"
-              placeholder="0 - 100%"
-              onChange={e =>
-                this.setState({
-                  popularity: { popularity, popValue: e.target.value }
-                })
-              }
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label for="data-status">Order Status</Label>
+            <Label for="data-status">Niveau</Label>
             <Input
               type="select"
               id="data-status"
-              value={order_status}
-              onChange={e => this.setState({ order_status: e.target.value })}>
-              <option>pending</option>
-              <option>canceled</option>
-              <option>delivered</option>
-              <option>on hold</option>
+              value={niveau.designation}
+            //onChange={e => this.setState({ order_status: e.target.value })}
+            >
+              {options_of_niveau}
+
             </Input>
           </FormGroup>
-          <FormGroup>
-            <Label for="data-price">Price</Label>
-            <Input
-              type="number"
-              value={price}
-              onChange={e => this.setState({ price: e.target.value })}
-              id="data-price"
-              placeholder="69.99"
-            />
+
+          <FormGroup check inline>
+            <Label check>
+              <Input type="checkbox" checked/> Responsable
+            </Label>
           </FormGroup>
+          <FormGroup check inline>
+            <Label check>
+              <Input type="checkbox" checked /> Statut
+           </Label>
+          </FormGroup>
+          <FormGroup check inline>
+            <Label check>
+              <Input type="checkbox" /> Active
+            </Label>
+          </FormGroup>
+
           {this.props.thumbView && img.length <= 0 ? (
             <label
               className="btn btn-primary"
