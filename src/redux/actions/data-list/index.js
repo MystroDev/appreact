@@ -28,7 +28,6 @@ export const filterData = value => {
 export const deleteData = obj => {
   return dispatch => {
     axios
-      .post("/api/datalist/delete-data", {
       .post("http://127.0.0.1:8000/user/delete/" + obj, {
         obj
       })
@@ -41,7 +40,7 @@ export const deleteData = obj => {
 export const updateData = obj => {
   return (dispatch, getState) => {
     axios
-      .post("/api/datalist/update-data", {
+      .post("http://127.0.0.1:8000/user/editer/"+obj.id, {
         obj
       })
       .then(response => {
@@ -54,7 +53,6 @@ export const addData = obj => {
   return (dispatch, getState) => {
     let params = getState().dataList.params
     axios
-      .post("/api/datalist/add-data", {
       .post("http://127.0.0.1:8000/user/create", {
         obj
       })
