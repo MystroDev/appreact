@@ -21,8 +21,8 @@ const determinePopularity = val => {
 }
 
 
-// GET DATA
-/*mock.onGet("http://127.0.0.1:8000/users").reply(response => {
+/*// GET DATA
+mock.onGet("http://127.0.0.1:8000/users").reply(response => {
   return [200, dataList]
 })
 mock.onGet("http://127.0.0.1:8000/users").reply(response => {
@@ -91,3 +91,4 @@ mock.onPost("/api/datalist/delete-selected").reply(request => {
   dataList = reducedArray
   return [200]
 })*/
+

@@ -2,7 +2,7 @@ import axios from "axios"
 
 export const getData = params => {
   return async dispatch => {
-    await axios.get("http://127.0.0.1:8000/users?page=1", params).then(response => {
+    await axios.get("http://127.0.0.1:8000/users", params).then(response => {
       dispatch({
         type: "GET_DATA",
         data: response.data.data,

@@ -12,7 +12,7 @@ class DataListSidebar extends Component {
     nom: "",
     prenom: "",
     matricule: "",
-    date_embauche: new Date(),
+    dateembauche: new Date(),
     category: [],
     niveau: [],
     order_status: "pending",
@@ -52,9 +52,9 @@ class DataListSidebar extends Component {
       if (this.props.data.matricule !== prevState.matricule) {
         this.setState({ matricule: this.props.data.matricule })
       }
-
+ 
       if (this.props.data.dateembauche !== prevState.dateembauche) {
-        this.setState({ date_embauche: this.props.data.dateembauche })
+        this.setState({ dateembauche: this.props.data.dateembauche })
 
       }
       if (this.props.data.order_status !== prevState.order_status) {
@@ -72,6 +72,7 @@ class DataListSidebar extends Component {
         id: "",
         nom: "",
         prenom: "",
+        dateembauche: "01/02/2020",
         matricule: 0,
         order_status: "pending",
         price: "",
@@ -86,6 +87,7 @@ class DataListSidebar extends Component {
         id: "",
         nom: "",
         prenom: "",
+        dateembauche: "",
         matricule: 0,
         order_status: "pending",
         price: "",
@@ -115,7 +117,7 @@ class DataListSidebar extends Component {
 
   render() {
     let { show, handleSidebar, data } = this.props
-    let { nom, prenom, matricule, date_embauche, category, niveau, order_status, price, popularity, img } = this.state
+    let { nom, prenom, matricule, dateembauche, category, niveau, order_status, price, popularity, img } = this.state
 
     //filling category with data
     const options_of_category = category.map((value, index) => {
@@ -210,8 +212,8 @@ class DataListSidebar extends Component {
             <Label for="data-name">Date Embauche</Label>
             <Input
               type="date"
-              value={date_embauche}
-              onChange={e => this.setState({ date_embauche: e.target.value })}
+              value={dateembauche}
+              onChange={e => this.setState({ dateembauche: e.target.value })}
               id="data-name"
             />
           </FormGroup>
