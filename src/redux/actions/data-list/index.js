@@ -29,6 +29,7 @@ export const deleteData = obj => {
   return dispatch => {
     axios
       .post("/api/datalist/delete-data", {
+      .post("http://127.0.0.1:8000/user/delete/" + obj, {
         obj
       })
       .then(response => {
@@ -54,6 +55,7 @@ export const addData = obj => {
     let params = getState().dataList.params
     axios
       .post("/api/datalist/add-data", {
+      .post("http://127.0.0.1:8000/user/create", {
         obj
       })
       .then(response => {

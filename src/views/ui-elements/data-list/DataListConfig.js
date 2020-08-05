@@ -296,22 +296,22 @@ class DataListConfig extends Component {
   }
 
   handleDelete = row => {
-    this.props.deleteData(row)
-    this.props.getData(this.props.parsedFilter)
-    if (this.state.data.length - 1 === 0) {
-      let urlPrefix = this.props.thumbView
-        ? "/data-list/thumb-view/"
-        : "/data-list/list-view/"
-      history.push(
-        `${urlPrefix}list-view?page=${parseInt(
-          this.props.parsedFilter.page - 1
-        )}&perPage=${this.props.parsedFilter.perPage}`
-      )
-      this.props.getData({
-        page: this.props.parsedFilter.page - 1,
-        perPage: this.props.parsedFilter.perPage
-      })
-    }
+    this.props.deleteData(row.id)
+    //this.props.getData(this.props.parsedFilter)
+    //if (this.state.data.length - 1 === 0) {
+      //let urlPrefix = this.props.thumbView
+        //? "/data-list/thumb-view/"
+        //: "/data-list/list-view/"
+     // history.push(
+        //`${urlPrefix}list-view?page=${parseInt(
+         // this.props.parsedFilter.page - 1
+        //)}&perPage=${this.props.parsedFilter.perPage}`
+     // )
+     // this.props.getData({
+       // page: this.props.parsedFilter.page - 1,
+        //perPage: this.props.parsedFilter.perPage
+      //})
+    //}
   }
 
   handleCurrentData = obj => {

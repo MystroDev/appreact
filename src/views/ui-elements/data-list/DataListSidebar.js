@@ -11,16 +11,18 @@ class DataListSidebar extends Component {
     id: "",
     nom: "",
     prenom: "",
-    matricule: "",
-    date_embauche: new Date(),
-    category: [],
-    niveau: [],
-    order_status: "pending",
-    price: "",
-    img: "",
-    popularity: {
-      popValue: ""
-    }
+    matricule: 0,
+    dateembauche: new Date(),
+    categoryTab: [],
+    niveauTab: [],
+    category: 0,
+    niveau: 0,
+    photo: "",
+    password: "",
+    titulaire: false,
+    responsable: false,
+    statut: false,
+    active: false,
   }
 
   addNew = false
@@ -28,12 +30,12 @@ class DataListSidebar extends Component {
   componentDidMount() {
     //categories
     axios.get('http://127.0.0.1:8000/categorie').then(resp => {
-      this.setState({ category: resp.data })
+      this.setState({ categoryTab: resp.data })
     });
 
     //niveau
     axios.get('http://127.0.0.1:8000/niveau').then(resp => {
-      this.setState({ niveau: resp.data })
+      this.setState({ niveauTab: resp.data })
     });
 
   }
@@ -54,17 +56,24 @@ class DataListSidebar extends Component {
       }
 
       if (this.props.data.dateembauche !== prevState.dateembauche) {
-        this.setState({ date_embauche: this.props.data.dateembauche })
+        this.setState({ dateembauche: this.props.data.dateembauche })
+      }
 
+      if (this.props.data.responsable !== prevState.responsable) {
+        this.setState({ responsable: this.props.data.responsable })
       }
-      if (this.props.data.order_status !== prevState.order_status) {
-        this.setState({ order_status: this.props.data.order_status })
+
+      if (this.props.data.titulaire !== prevState.titulaire) {
+        this.setState({ titulaire: this.props.data.titulaire })
       }
-      if (this.props.data.price !== prevState.price) {
-        this.setState({ price: this.props.data.price })
+
+      if (this.props.data.statut !== prevState.statut) {
+        this.setState({ statut: this.props.data.statut })
       }
-      if (this.props.data.img !== prevState.img) {
-        this.setState({ img: this.props.data.img })
+
+
+      if (this.props.data.active !== prevState.active) {
+        this.setState({ active: this.props.data.active })
       }
     }
     if (this.props.data === null && prevProps.data !== null) {
@@ -73,12 +82,14 @@ class DataListSidebar extends Component {
         nom: "",
         prenom: "",
         matricule: 0,
-        order_status: "pending",
-        price: "",
-        img: "",
-        popularity: {
-          popValue: ""
-        }
+        dateembauche: new Date(),
+        category: 0,
+        niveau: 0,
+        photo: "",
+        titulaire: false,
+        responsable: false,
+        statut: false,
+        active: false,
       })
     }
     if (this.addNew) {
@@ -87,12 +98,14 @@ class DataListSidebar extends Component {
         nom: "",
         prenom: "",
         matricule: 0,
-        order_status: "pending",
-        price: "",
-        img: "",
-        popularity: {
-          popValue: ""
-        }
+        dateembauche: new Date(),
+        category: 0,
+        niveau: 0,
+        photo: "",
+        titulaire: false,
+        responsable: false,
+        statut: false,
+        active: false,
       })
     }
     this.addNew = false
@@ -100,39 +113,81 @@ class DataListSidebar extends Component {
   }
 
   handleSubmit = obj => {
+    delete obj.niveauTab
+    delete obj.categoryTab
+
     if (this.props.data !== null) {
       this.props.updateData(obj)
     } else {
       this.addNew = true
+
+
       this.props.addData(obj)
+      console.log(obj)
     }
-    let params = Object.keys(this.props.dataParams).length
-      ? this.props.dataParams
-      : { page: 1, perPage: 4 }
-    this.props.handleSidebar(false, true)
-    this.props.getData(params)
+    //let params = Object.keys(this.props.dataParams).length
+    //? this.props.dataParams
+    //: { page: 1, perPage: 4 }
+    //this.props.handleSidebar(false, true)
+    //this.props.getData(params)
   }
 
   render() {
     let { show, handleSidebar, data } = this.props
-    let { nom, prenom, matricule, date_embauche, category, niveau, order_status, price, popularity, img } = this.state
+    let { nom, prenom, matricule, dateembauche, categoryTab, niveauTab, category, niveau, titulaire, responsable, statut, active } = this.state
 
     //filling category with data
-    const options_of_category = category.map((value, index) => {
-      return <option key={index}>{value.designation}</option>
-    })
+    let options_of_category = null;
+    if(categoryTab != null){
+        options_of_category = categoryTab.map((value, index) => {
+        return <option key={value.id}>{value.designation}</option>
+      })
+
+    }
 
     //filling niveau with data
-    const options_of_niveau = category.map((value, index) => {
-      return <option key={index}>{value.designation}</option>
-    })
+      let options_of_niveau = null;
+      if(niveauTab!=null){
+        options_of_niveau = niveauTab.map((value, index) => {
+        return <option key={value.id}>{value.designation}</option>
+      })
+      }
 
 
     let fulldate = moment().format("DD/MM/YYYY");
-    //console.log(this.state.date_embauche)
-    //fulldate = this.state.date_embauche
+    //console.log(this.state.dateembauche)
+    //fulldate = this.state.dateembauche
     //let fulldate2 = fulldate.moment.format("DD/MM/YYYY")
     //console.log(fulldate2)
+
+
+    //filling checkboxes
+    let firstCheckbox = "";
+    let secondCheckbox = "";
+    let thirdCheckbox = "";
+    let fourthCheckbox = "";
+
+    if (responsable)
+      firstCheckbox = <Input type="checkbox" checked onChange={e => this.setState({ responsable: e.target.checked })} />
+    else
+      firstCheckbox = <Input type="checkbox" onChange={e => this.setState({ responsable: e.target.checked })} />
+
+
+    if (statut)
+      secondCheckbox = <Input type="checkbox" checked onChange={e => this.setState({ statut: e.target.checked })} />
+    else
+      secondCheckbox = <Input type="checkbox" onChange={e => this.setState({ statut: e.target.checked })} />
+
+    if (active)
+      thirdCheckbox = <Input type="checkbox" checked onChange={e => this.setState({ active: e.target.checked })} />
+    else
+      thirdCheckbox = <Input type="checkbox" onChange={e => this.setState({ active: e.target.checked })} />
+
+    if (titulaire)
+      fourthCheckbox = <Input type="checkbox" checked onChange={e => this.setState({ titulaire: e.target.checked })} />
+    else
+      fourthCheckbox = <Input type="checkbox" onChange={e => this.setState({ titulaire: e.target.checked })} />
+
     return (
       <div
         className={classnames("data-list-sidebar", {
@@ -145,34 +200,6 @@ class DataListSidebar extends Component {
         <PerfectScrollbar
           className="data-list-fields px-2 mt-3"
           options={{ wheelPropagation: false }}>
-          {this.props.thumbView && img.length ? (
-            <FormGroup className="text-center">
-              <img className="img-fluid" src={img} alt={nom} />
-              <div className="d-flex flex-wrap justify-content-between mt-2">
-                <label
-                  className="btn btn-flat-primary"
-                  htmlFor="update-image"
-                  color="primary">
-                  Upload Image
-                  <input
-                    type="file"
-                    id="update-image"
-                    hidden
-                    onChange={e =>
-                      this.setState({
-                        img: URL.createObjectURL(e.target.files[0])
-                      })
-                    }
-                  />
-                </label>
-                <Button
-                  color="flat-danger"
-                  onClick={() => this.setState({ img: "" })}>
-                  Remove Image
-                </Button>
-              </div>
-            </FormGroup>
-          ) : null}
           <FormGroup>
             <Label for="data-name">Nom</Label>
             <Input
@@ -210,8 +237,8 @@ class DataListSidebar extends Component {
             <Label for="data-name">Date Embauche</Label>
             <Input
               type="date"
-              value={date_embauche}
-              onChange={e => this.setState({ date_embauche: e.target.value })}
+              value={dateembauche}
+              onChange={e => this.setState({ dateembauche: e.target.value })}
               id="data-name"
             />
           </FormGroup>
@@ -221,8 +248,8 @@ class DataListSidebar extends Component {
             <Input
               type="select"
               id="data-category"
-              value={category.designation}
-            //onChange={e => this.setState({ category: e.target.value })}
+              value={""}
+              onChange={e => this.setState({ category: e.target.value })}
             >
               {options_of_category}
             </Input>
@@ -232,8 +259,8 @@ class DataListSidebar extends Component {
             <Input
               type="select"
               id="data-status"
-              value={niveau.designation}
-            //onChange={e => this.setState({ order_status: e.target.value })}
+              value={""}
+              onChange={e => this.setState({ niveau: e.target.value })}
             >
               {options_of_niveau}
 
@@ -242,36 +269,26 @@ class DataListSidebar extends Component {
 
           <FormGroup check inline>
             <Label check>
-              <Input type="checkbox" checked/> Responsable
+              {firstCheckbox} Responsable
             </Label>
           </FormGroup>
           <FormGroup check inline>
             <Label check>
-              <Input type="checkbox" checked /> Statut
+              {secondCheckbox} Statut
            </Label>
           </FormGroup>
           <FormGroup check inline>
             <Label check>
-              <Input type="checkbox" /> Active
+              {thirdCheckbox} Active
             </Label>
           </FormGroup>
 
-          {this.props.thumbView && img.length <= 0 ? (
-            <label
-              className="btn btn-primary"
-              htmlFor="upload-image"
-              color="primary">
-              Upload Image
-              <input
-                type="file"
-                id="upload-image"
-                hidden
-                onChange={e =>
-                  this.setState({ img: URL.createObjectURL(e.target.files[0]) })
-                }
-              />
-            </label>
-          ) : null}
+          <FormGroup check inline>
+            <Label check>
+              {fourthCheckbox} Titulaire
+            </Label>
+          </FormGroup>
+
         </PerfectScrollbar>
         <div className="data-list-sidebar-footer px-2 d-flex justify-content-start align-items-center mt-1">
           <Button color="primary" onClick={() => this.handleSubmit(this.state)}>
