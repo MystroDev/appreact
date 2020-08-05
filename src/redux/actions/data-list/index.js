@@ -2,7 +2,7 @@ import axios from "axios"
 
 export const getData = params => {
   return async dispatch => {
-    await axios.get("http://127.0.0.1:8000/users", params).then(response => {
+    await axios.get("/users", params).then(response => {
       dispatch({
         type: "GET_DATA",
         data: response.data.data,
@@ -15,7 +15,7 @@ export const getData = params => {
 
 export const getInitialData = () => {
   return async dispatch => {
-    await axios.get("http://127.0.0.1:8000/users").then(response => {
+    await axios.get("/users").then(response => {
       dispatch({ type: "GET_ALL_DATA", data: response.data })
     })
   }
@@ -28,7 +28,7 @@ export const filterData = value => {
 export const deleteData = obj => {
   return dispatch => {
     axios
-      .post("http://127.0.0.1:8000/user/delete/" + obj, {
+      .post("/user/delete/" + obj, {
         obj
       })
       .then(response => {
@@ -40,7 +40,7 @@ export const deleteData = obj => {
 export const updateData = obj => {
   return (dispatch, getState) => {
     axios
-      .post("http://127.0.0.1:8000/user/editer/"+obj.id, {
+      .post("/user/editer/"+obj.id, {
         obj
       })
       .then(response => {
@@ -53,7 +53,7 @@ export const addData = obj => {
   return (dispatch, getState) => {
     let params = getState().dataList.params
     axios
-      .post("http://127.0.0.1:8000/user/create", {
+      .post("/user/create", {
         obj
       })
       .then(response => {

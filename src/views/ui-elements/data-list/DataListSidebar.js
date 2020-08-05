@@ -115,6 +115,7 @@ class DataListSidebar extends Component {
   handleSubmit = obj => {
     delete obj.niveauTab
     delete obj.categoryTab
+    delete obj.id
 
     if (this.props.data !== null) {
       this.props.updateData(obj)
