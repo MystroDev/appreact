@@ -8,16 +8,15 @@ import moment from 'moment'
 
 class DataListSidebar extends Component {
   state = {
-    id: "",
+    id: 0,
     nom: "",
     prenom: "",
     matricule: 0,
     dateembauche: new Date(),
     categoryTab: [],
     niveauTab: [],
-    category: 0,
-    niveau: 0,
-    photo: "",
+    idcategorie: 0,
+    idniveau: 0,
     password: "",
     titulaire: false,
     responsable: false,
@@ -29,12 +28,11 @@ class DataListSidebar extends Component {
 
   componentDidMount() {
     //categories
-    axios.get('http://127.0.0.1:8000/categorie').then(resp => {
+    axios.get('/categorie').then(resp => {
       this.setState({ categoryTab: resp.data })
     });
-
     //niveau
-    axios.get('http://127.0.0.1:8000/niveau').then(resp => {
+    axios.get('/niveau').then(resp => {
       this.setState({ niveauTab: resp.data })
     });
 
@@ -75,17 +73,24 @@ class DataListSidebar extends Component {
       if (this.props.data.active !== prevState.active) {
         this.setState({ active: this.props.data.active })
       }
+
+      if (this.props.data.idcategorie !== prevState.idcategorie) {
+        this.setState({ idcategorie: this.props.data.idcategorie })
+      }
+
+      if (this.props.data.idniveau !== prevState.idniveau) {
+        this.setState({ idniveau: this.props.data.idniveau })
+      }
     }
     if (this.props.data === null && prevProps.data !== null) {
       this.setState({
-        id: "",
+        id: 0,
         nom: "",
         prenom: "",
         matricule: 0,
         dateembauche: new Date(),
-        category: 0,
-        niveau: 0,
-        photo: "",
+        idcategorie: 0,
+        idniveau: 0,
         titulaire: false,
         responsable: false,
         statut: false,
@@ -94,14 +99,13 @@ class DataListSidebar extends Component {
     }
     if (this.addNew) {
       this.setState({
-        id: "",
+        id: 0,
         nom: "",
         prenom: "",
         matricule: 0,
         dateembauche: new Date(),
-        category: 0,
-        niveau: 0,
-        photo: "",
+        idcategorie: 0,
+        idniveau: 0,
         titulaire: false,
         responsable: false,
         statut: false,
@@ -113,18 +117,12 @@ class DataListSidebar extends Component {
   }
 
   handleSubmit = obj => {
-    delete obj.niveauTab
-    delete obj.categoryTab
-    delete obj.id
-
+    
     if (this.props.data !== null) {
       this.props.updateData(obj)
     } else {
       this.addNew = true
-
-
       this.props.addData(obj)
-      console.log(obj)
     }
     //let params = Object.keys(this.props.dataParams).length
     //? this.props.dataParams
@@ -135,13 +133,14 @@ class DataListSidebar extends Component {
 
   render() {
     let { show, handleSidebar, data } = this.props
-    let { nom, prenom, matricule, dateembauche, categoryTab, niveauTab, category, niveau, titulaire, responsable, statut, active } = this.state
+    let { nom, prenom, matricule, dateembauche, categoryTab, niveauTab, idcategorie, idniveau, titulaire, responsable, statut, active } = this.state
 
+    console.log(idniveau,idcategorie)
     //filling category with data
     let options_of_category = null;
     if(categoryTab != null){
         options_of_category = categoryTab.map((value, index) => {
-        return <option key={value.id}>{value.designation}</option>
+        return <option key={value.id}>{value.id}</option>
       })
 
     }
@@ -150,16 +149,10 @@ class DataListSidebar extends Component {
       let options_of_niveau = null;
       if(niveauTab!=null){
         options_of_niveau = niveauTab.map((value, index) => {
-        return <option key={value.id}>{value.designation}</option>
+        return <option key={value.id}>{value.id}</option>
       })
       }
 
-
-    let fulldate = moment().format("DD/MM/YYYY");
-    //console.log(this.state.dateembauche)
-    //fulldate = this.state.dateembauche
-    //let fulldate2 = fulldate.moment.format("DD/MM/YYYY")
-    //console.log(fulldate2)
 
 
     //filling checkboxes
@@ -249,8 +242,8 @@ class DataListSidebar extends Component {
             <Input
               type="select"
               id="data-category"
-              value={""}
-              onChange={e => this.setState({ category: e.target.value })}
+              value={idcategorie}
+              onChange={e => this.setState({ idcategorie: e.target.value })}
             >
               {options_of_category}
             </Input>
@@ -260,8 +253,8 @@ class DataListSidebar extends Component {
             <Input
               type="select"
               id="data-status"
-              value={""}
-              onChange={e => this.setState({ niveau: e.target.value })}
+              value={idniveau}
+              onChange={e => this.setState({ idniveau: e.target.value })}
             >
               {options_of_niveau}
 
