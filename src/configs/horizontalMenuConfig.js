@@ -24,6 +24,14 @@ const horizontalMenuConfig = [
         permissions: ["admin", "editor"],
         navLink: "/data-list/Users"
       },
+      {
+        id: "autorisations",
+        title: "Autorisations",
+        type: "item",
+        icon: <Icon.Circle size={12} />,
+        permissions: ["admin", "editor"],
+        navLink: "/data-list/Autorisations"
+      },
     ]
   },
   {

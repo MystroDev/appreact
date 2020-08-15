@@ -81,6 +81,7 @@ const divider = lazy(() => import("./components/@vuexy/divider/Divider"))
 const vuexyWizard = lazy(() => import("./components/@vuexy/wizard/Wizard"))
 const listView = lazy(() => import("./views/ui-elements/data-list/ListView"))
 const users = lazy(() => import("./views/dashboard/analytics/Users"))
+const autorisations = lazy(() => import("./views/dashboard/analytics/Autorisations"))
 const thumbView = lazy(() => import("./views/ui-elements/data-list/ThumbView"))
 const select = lazy(() => import("./views/forms/form-elements/select/Select"))
 const switchComponent = lazy(() =>
@@ -209,6 +210,7 @@ class AppRouter extends React.Component {
           <AppRoute path="/calendar" component={calendar} />
           <AppRoute path="/data-list/list-view" component={listView} />
           <AppRoute path="/data-list/Users" component={users} />
+          <AppRoute path="/data-list/Autorisations" component={autorisations} />
           <AppRoute path="/data-list/thumb-view" component={thumbView} />
           <AppRoute path="/ui-element/grid" component={grid} />
           <AppRoute path="/ui-element/typography" component={typography} />
